@@ -1,8 +1,13 @@
 # Cryptopy
-**A tool for encrypting and decrypting files in windows**
+**A tool for encrypting and decrypting files, in windows**
 
 
-![Screenshot (59)](https://user-images.githubusercontent.com/85396965/123549873-0edbbe80-d780-11eb-9841-ba9a36f04087.png)
+
+![pic0](https://user-images.githubusercontent.com/85396965/195687285-be103605-56d6-412f-a435-b47c61bf29de.png)
+
+
+
+
 
 # Install
 ```
@@ -10,8 +15,11 @@ pip install -r requirements.txt
 ```
 
 ## Usage:
-`python cryptopy.py`
+```
+python cryptopy.py
+```
 ### or
-`python3 cryptopy.py`
-
+```
+python3 cryptopy.py
+```
 
