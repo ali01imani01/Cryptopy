@@ -17,7 +17,7 @@ print(Fore.GREEN+"""
                          """+Fore.LIGHTRED_EX+"""<<By SNP>>                                       
                                                                     
 """)
-print(Fore.MAGENTA,"1-Encrypt(Enter 1)\n 2-Decrypt(Enter 2)")
+print(Fore.MAGENTA,"1-Encrypt files(Enter 1)\n 2-Decrypt files(Enter 2)")
 intro = int(input(" Number: "))
 if intro == 1 :
     adr_file = str(input("Enter your folder adress: "))
