@@ -1,6 +1,7 @@
 import os 
 from subprocess import check_output
 import subprocess
+from traceback import print_tb
 from cryptography.fernet import Fernet
 import colorama 
 from colorama import init , Fore
@@ -12,62 +13,93 @@ print(Fore.GREEN+"""
 |  /    |  \/|   \  /   |  \/|    / \    | / \|  |  \/|   \  / 
 |  \_   |    /   / /    |  __/    | |    | \_/|  |  __/   / /  
 \____/  \_/\_\  /_/     \_/       \_/    \____/  \_/     /_/   
-                                                                 
+
+                         """+Fore.LIGHTRED_EX+"""<<By SNP>>                                       
                                                                     
 """)
-print(Fore.MAGENTA,"1-encrypting(enter 1)\n 2-decrypting(enter 2)")
-intro = int(input(" number:"))
+print(Fore.MAGENTA,"1-Encrypt(Enter 1)\n 2-Decrypt(Enter 2)")
+intro = int(input(" Number: "))
 if intro == 1 :
-    print(Fore.CYAN+"Please enter youre file adress \nExample: e: && cd deadpool && cd scan && dir /S /B *.txt\n",end='')
-    # The file address is taken here
-    adr_file = str(input("enter youre file adress: "))
-    # Key is created here
+    adr_file = str(input("Enter your folder adress: "))
+    format = str(input("Enter your intended format to Encrypt (Enter * if you want to encrypt all files): "))
+        # Key is created here
     key = Fernet.generate_key()
-    print(f"your kay : {key}" )
-    # Saving the key in txt file
+    print(f"Your key : {key}" )
+        # Saving the key in txt file
     file = open("key.txt","wb")
     file.write(b"".join([b"'"+key+b"'"]))
     file.close()
-    print(Fore.MAGENTA+"[+]"+Fore.GREEN+"youre key saved in key.txt")
-
     Encrypt = Fernet(key)
-    cmd = check_output(adr_file , shell = True ).decode().split()
-    # Encrypt files and delete previous files
-    for g in cmd :
-        if os.path.exists(g):
-            dirlist= open(g,"rb")
-            data = dirlist.read()
-            enc_data = Encrypt.encrypt(data)
-            new_file = open(g+ ".snoopy" , "wb")       
-            new_file.write(enc_data)
-            new_file.close()
-            dirlist.close()
-            os.remove(g)
-            print(Fore.LIGHTGREEN_EX+g+" --------------->" "+" "{Encrypted}")
-        else : print(Fore.RED+"file not exist")
+    if format=="*" :
+        print(Fore.MAGENTA+"[+]"+Fore.GREEN+"Your key is saved in key.txt")
+        for dirpath, dirs, files  in os.walk(adr_file):
+            for f in files:
+                    # Encrypt files and delete previous files
+                    full_file=os.path.join(adr_file, f)
+                    dirlist= open(full_file,"rb")
+                    data = dirlist.read()
+                    enc_data = Encrypt.encrypt(data)
+                    new_file = open(full_file+".snoopy" , "wb")       
+                    new_file.write(enc_data)
+                    new_file.close()
+                    dirlist.close()
+                    os.remove(full_file)
+                    os.rename(new_file.name, full_file.replace('.snoopy',''))
+                    print(Fore.LIGHTGREEN_EX+full_file+" --------------->" "+" "{Encrypted}")
+    else:
+        print(Fore.MAGENTA+"[+]"+Fore.GREEN+"Your key is saved in key.txt")
+        for dirpath, dirs, files  in os.walk(adr_file):
+            for f in files:
+                if f.endswith(format):
+                    full_file=os.path.join(adr_file, f)
+                    dirlist= open(full_file,"rb")
+                    data = dirlist.read()
+                    enc_data = Encrypt.encrypt(data)
+                    new_file = open(full_file+".snoopy" , "wb")       
+                    new_file.write(enc_data)
+                    new_file.close()
+                    dirlist.close()
+                    os.remove(full_file)
+                    os.rename(new_file.name, full_file.replace('.snoopy',''))
+                    print(Fore.LIGHTGREEN_EX+full_file+" --------------->" "+" "{Encrypted}")
 
-    print(Fore.LIGHTYELLOW_EX+"Back to menu : 1 \nexit: 2")
 elif intro == 2 :
-    print(Fore.CYAN+"Please enter youre file adress \nExample: e: && cd deadpool && cd scan && dir /S /B *.snoopy\n",end='')
-    adr_file_dec= str(input("enter youre file adress: "))
-    print(Fore.CYAN+"Please enter youre key for decrypting \nExample: '4yA2Qvjdwz3mRySc1QX4AFoBahsqxnsNHo8pb8MVdRo='\n ",end='')
-    dec_key=str(input("enter youre key: "))
+    print(Fore.CYAN+"Please enter your file adress \nExample: D:\pic\\temp\n",end='')
+    adr_file_dec= str(input("Enter your file adress: "))
+    format = input("Enter your intended format to Decrypt:")
+    print(Fore.CYAN+"Please enter your key for decrypting \nExample: '4yA2Qvjdwz3mRySc1QX4AFoBahsqxnsNHo8pb8MVdRo='\n ",end='')
+    dec_key=str(input("Enter your key: "))
     dencrypt = Fernet(dec_key)
-    cmd = check_output(adr_file_dec, shell = True ).decode().split()
-    for g in cmd :
-        if os.path.exists(g):
-            dirlist= open(g,"rb")
-            data = dirlist.read()
-            enc_data = dencrypt.decrypt(data)
-            new_file = open(g+ ".txt" , "wb")       
-            new_file.write(enc_data)
-            new_file.close()
-            dirlist.close()
-            os.remove(g)
-            print(Fore.LIGHTGREEN_EX+g+" --------------->" "+" "{Dencrypted}")
-        else:  
-         print(Fore.RED+"file not exist!")
-    print(Fore.LIGHTYELLOW_EX+"Back to menu : 1 \nexit: 2")
+    if format=="*" :
+        for dirpath, dirs, files  in os.walk(adr_file_dec):
+            for f in files:
+                    full_file=os.path.join(adr_file_dec, f)
+                    dirlist= open(full_file,"rb")
+                    data = dirlist.read()
+                    enc_data = dencrypt.decrypt(data)
+                    new_file = open(full_file+".snoopy", "wb")       
+                    new_file.write(enc_data)
+                    new_file.close()
+                    dirlist.close()
+                    #Rename the file to the real name:
+                    os.remove(full_file)
+                    os.rename(new_file.name, full_file.replace('.snoopy',''))
+                    print(Fore.LIGHTGREEN_EX+full_file+" --------------->" "+" "{Decrypted}")
+    else:
+        for dirpath, dirs, files  in os.walk(adr_file_dec):
+            for f in files:
+                if f.endswith(format):
+                    full_file=os.path.join(adr_file_dec, f)
+                    dirlist= open(full_file,"rb")
+                    data = dirlist.read()
+                    enc_data = dencrypt.decrypt(data)
+                    new_file = open(full_file+".snoopy", "wb")       
+                    new_file.write(enc_data)
+                    new_file.close()
+                    dirlist.close()
+                    #Rename the file to the real name:
+                    os.remove(full_file)
+                    os.rename(new_file.name, full_file.replace('.snoopy',''))
+                    print(Fore.LIGHTGREEN_EX+full_file+" --------------->" "+" "{Decrypted}")
 
-else : print(Fore.LIGHTRED_EX+"Wrong number!!")
 
