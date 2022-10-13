@@ -14,7 +14,7 @@ print(Fore.GREEN+"""
 |  \_   |    /   / /    |  __/    | |    | \_/|  |  __/   / /  
 \____/  \_/\_\  /_/     \_/       \_/    \____/  \_/     /_/   
 
-                         """+Fore.LIGHTRED_EX+"""<<By SNP>>                                       
+                         """+Fore.LIGHTRED_EX+"""<<By SNOOPY>>                                       
                                                                     
 """)
 print(Fore.MAGENTA,"1-Encrypt files(Enter 1)\n 2-Decrypt files(Enter 2)")
